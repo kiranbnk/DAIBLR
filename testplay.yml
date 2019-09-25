@@ -1,0 +1,29 @@
+---
+ - hosts: local 
+   become: yes
+   tasks:
+     - name: Installing Apache
+       yum:
+        name: httpd
+        state: latest
+     - name: Start the Apace Serive
+       service:
+        name: httpd
+        state: started 
+     - name: Putting Index Page
+       copy: 
+        content: "Welcome to the Web"
+        dest: /var/www/html/index.html
+     - name: Firewall Service Restarting
+       service:
+        name: firewalld
+        state: restarted
+     - name: Firewall access allocation
+       firewalld:
+        port: 80/tcp
+        permanent: true
+        state: enabled
+     - name: Firewall Service Restarting
+       service:
+        name: firewalld
+        state: restarted

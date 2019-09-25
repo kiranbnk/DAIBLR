@@ -1,0 +1,35 @@
+---
+ - hosts: group1 
+   become: yes
+   vars:
+    package1: httpd
+    package2: vsftpd
+    package3: firewalld
+    path1: /var/www/html/index.html
+    path2: /var/ftp/pub/index.txt
+   tasks:
+     - name: Installing {{package1}}
+       yum:
+        name: "{{package1}}"
+        state: latest
+     - name: Start the {{package1}} Service
+       service:
+        name: "{{package1}}" 
+        state: started 
+     - name: Putting Index Page
+       copy: 
+        content: "Welcome to the Dark Web"
+        dest: "{{path1}}" 
+     - name: "{{package3}} Service Restarting"
+       service:
+        name: "{{package3}}"
+        state: restarted
+     - name: "{{package3}} access allocation"
+       firewalld:
+        port: 80/tcp
+        permanent: true
+        state: enabled
+     - name: Firewall Service {{package1}}
+       service:
+        name: firewalld
+        state: restarted
