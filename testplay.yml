@@ -1,5 +1,5 @@
 ---
- - hosts: local 
+ - hosts: group1 
    become: yes
    tasks:
      - name: Installing Apache
